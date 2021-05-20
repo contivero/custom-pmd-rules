@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+
+   <!-- StringUtils rules  -->
+   <rule name="Prefer_StringUtils_isEmpty" language="java" message="Prefer StringUtils.isEmpty" class="net.sourceforge.pmd.lang.rule.XPathRule">
+   <description>
+      Instead of checking if a string is different from null and the empty string, use StringUtils.isEmpty
+   </description>
+   <priority>4</priority>
+   <properties>
+      <property name="version" value="2.0"/>
+      <property name="xpath">
+         <value>
+<![CDATA[
+(//ConditionalAndExpression[
+EqualityExpression[@Image="!="][
+  PrimaryExpression/PrimaryPrefix/Literal/NullLiteral
+  and PrimaryExpression/PrimaryPrefix/Name
+  ] and (UnaryExpressionNotPlusMinus[@Image="!"]/PrimaryExpression[
+    (PrimaryPrefix/Literal[@Image='""']
+    and PrimarySuffix[@Image="equals"] 
+    and PrimarySuffix/Arguments/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Name[@Image=../../../../../../../../../EqualityExpression/PrimaryExpression/PrimaryPrefix/Name/@Image]
+    ) or (
+      PrimaryPrefix/Name[@Image = concat(../../../../EqualityExpression[@Image="!="]/PrimaryExpression/PrimaryPrefix/Name/@Image, ".equals")]
+      and PrimarySuffix/Arguments/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal[@Image='""']
+    )
+  ] or EqualityExpression[@Image = "=="][
+     PrimaryExpression/PrimaryPrefix/Literal/BooleanLiteral[@True = false()]
+     and (
+       PrimaryExpression[
+         PrimaryPrefix/Literal[@Image='""']
+         and PrimarySuffix[@Image="equals"]
+         and PrimarySuffix/Arguments/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Name[@Image=../../../../../../../../../EqualityExpression/PrimaryExpression/PrimaryPrefix/Name/@Image]
+       ]) or (
+       PrimaryExpression/PrimaryPrefix/Name[@Image = concat(../../../../EqualityExpression[@Image="!="]/PrimaryExpression/PrimaryPrefix/Name/@Image , ".equals")]
+     )
+]
+)
+]
+
+|
+ 
+//UnaryExpressionNotPlusMinus[@Image="!"]/PrimaryExpression/PrimaryPrefix/Expression/ConditionalOrExpression[
+ EqualityExpression[@Image="=="][PrimaryExpression/PrimaryPrefix/Literal/NullLiteral
+  and PrimaryExpression/PrimaryPrefix/Name]
+  and PrimaryExpression[
+   PrimaryPrefix/Literal[@Image='""']
+   and PrimarySuffix[@Image="equals"] 
+   and PrimarySuffix/Arguments/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Name[@Image=../../../../../../../../EqualityExpression/PrimaryExpression/PrimaryPrefix/Name/@Image]
+  or (
+   PrimaryPrefix/Name[@Image = concat(../../../EqualityExpression[@Image="=="]/PrimaryExpression/PrimaryPrefix/Name/@Image, ".equals")]
+   and PrimarySuffix/Arguments/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal[@Image='""']
+  )
+ ]
+]
+
+|
+
+//EqualityExpression[@Image="=="][
+ PrimaryExpression/PrimaryPrefix/Literal/BooleanLiteral[@True = false()]
+ and PrimaryExpression/PrimaryPrefix/Expression/ConditionalOrExpression[
+   EqualityExpression[@Image = "=="][
+         PrimaryExpression/PrimaryPrefix/Literal/NullLiteral
+     and PrimaryExpression/PrimaryPrefix/Name 
+   ] and (PrimaryExpression[
+     PrimaryPrefix/Literal[@Image='""']
+     and PrimarySuffix[@Image = "equals"]
+     and PrimarySuffix/Arguments/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Name[@Image = ../../../../../../../../EqualityExpression/PrimaryExpression/PrimaryPrefix/Name/@Image]
+   ] or (
+       PrimaryExpression/PrimaryPrefix/Name[@Image = concat(../../../EqualityExpression/PrimaryExpression/PrimaryPrefix/Name/@Image, ".equals")] 
+       and PrimaryExpression/PrimarySuffix/Arguments/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal[@Image='""']
+    )
+   )
+ ]
+]
+)
+]]>
+         </value>
+      </property>
+   </properties>
+</rule>
+</ruleset>
