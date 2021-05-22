@@ -174,11 +174,16 @@ EqualityExpression[@Image="!="][
     )
 ]
 |
-//UnaryExpressionNotPlusMinus[@Image="!"]/PrimaryExpression/PrimaryPrefix/Expression/ConditionalOrExpression[
-  EqualityExpression[@Image="=="][
-    PrimaryExpression/PrimaryPrefix/Name[pmd-java:typeIs("java.util.Collection")]
-    and PrimaryExpression/PrimaryPrefix/Literal/NullLiteral
-  ] and PrimaryExpression/PrimaryPrefix/Name[@Image = concat(../../../EqualityExpression["=="]/PrimaryExpression/PrimaryPrefix/Name/@Image, ".isEmpty")]
+//UnaryExpressionNotPlusMinus[@Image="!"][
+  PrimaryExpression/PrimaryPrefix/Expression/ConditionalOrExpression[
+    EqualityExpression[@Image="=="][
+      PrimaryExpression/PrimaryPrefix/Name[pmd-java:typeIs("java.util.Collection")]
+      and PrimaryExpression/PrimaryPrefix/Literal/NullLiteral
+    ] and PrimaryExpression/PrimaryPrefix/Name[@Image = concat(../../../EqualityExpression["=="]/PrimaryExpression/PrimaryPrefix/Name/@Image, ".isEmpty")]
+  ] or PrimaryExpression [
+    PrimaryPrefix/Name[@Image = "CollectionUtils.isEmpty"]
+    and PrimarySuffix/Arguments//Name
+  ]
 ]
 |
 //EqualityExpression[@Image="=="][
@@ -188,8 +193,12 @@ EqualityExpression[@Image="!="][
       PrimaryExpression/PrimaryPrefix/Name[pmd-java:typeIs("java.util.Collection")]
       and PrimaryExpression/PrimaryPrefix/Literal/NullLiteral
     ] and PrimaryExpression/PrimaryPrefix/Name[@Image = concat(../../../EqualityExpression["=="]/PrimaryExpression/PrimaryPrefix/Name/@Image, ".isEmpty")]
-  ]
-])
+  ] or (
+    PrimaryExpression/PrimaryPrefix/Name[@Image = "CollectionUtils.isEmpty"]
+    and PrimaryExpression/PrimaryPrefix/Literal/BooleanLiteral[@True = false()]
+  )
+]
+)
 ]]>
          </value>
       </property>
