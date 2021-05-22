@@ -2,9 +2,9 @@
 <ruleset xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
 
    <!-- StringUtils rules  -->
-   <rule name="Prefer_StringUtils_isEmpty" language="java" message="Prefer StringUtils.isEmpty" class="net.sourceforge.pmd.lang.rule.XPathRule">
+   <rule name="Prefer_StringUtils_isNotEmpty" language="java" message="Prefer StringUtils.isNotEmpty" class="net.sourceforge.pmd.lang.rule.XPathRule">
    <description>
-      Instead of checking if a string is different from null and the empty string, use StringUtils.isEmpty
+      Instead of checking if a String is different from null and the empty string, use StringUtils.isNotEmpty
    </description>
    <priority>4</priority>
    <properties>
@@ -74,6 +74,42 @@ EqualityExpression[@Image="!="][
  ]
 ]
 )
+]]>
+         </value>
+      </property>
+   </properties>
+</rule>
+
+<rule name="Prefer_StringUtils.isEmpty"
+      language="java"
+      message="Use StringUtils.isEmpty"
+      class="net.sourceforge.pmd.lang.rule.XPathRule">
+   <description>
+      Instead of checking against null and the empty string explicitly, use StringUtils.isEmpty
+   </description>
+   <priority>4</priority>
+   <properties>
+      <property name="version" value="2.0"/>
+      <property name="xpath">
+         <value>
+<![CDATA[
+//ConditionalOrExpression[
+  EqualityExpression[@Image="=="][
+    PrimaryExpression/PrimaryPrefix/Name[pmd-java:typeIs("java.lang.String")]
+    and PrimaryExpression/PrimaryPrefix/Literal/NullLiteral
+  ] and (
+      (PrimaryExpression[
+      PrimaryPrefix/Literal[@Image='""']
+      and PrimarySuffix[@Image="equals"]
+      and PrimarySuffix/Arguments/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Name[@Image=../../../../../../../../EqualityExpression/PrimaryExpression/PrimaryPrefix/Name/@Image]
+    ]) or (
+      PrimaryExpression[
+        PrimaryPrefix/Name[@Image=concat(../../../EqualityExpression/PrimaryExpression/PrimaryPrefix/Name/@Image, ".equals")]
+        and PrimarySuffix/Arguments/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal[@Image='""']
+      ]
+    )
+  )
+]
 ]]>
          </value>
       </property>
