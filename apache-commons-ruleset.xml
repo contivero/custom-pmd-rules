@@ -18,7 +18,7 @@ EqualityExpression[@Image="!="][
   and PrimaryExpression/PrimaryPrefix/Name
   ] and (UnaryExpressionNotPlusMinus[@Image="!"]/PrimaryExpression[
     (PrimaryPrefix/Literal[@Image='""']
-    and PrimarySuffix[@Image="equals"] 
+    and PrimarySuffix[@Image="equals"]
     and PrimarySuffix/Arguments/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Name[@Image=../../../../../../../../../EqualityExpression/PrimaryExpression/PrimaryPrefix/Name/@Image]
     ) or (
       PrimaryPrefix/Name[@Image = concat(../../../../EqualityExpression[@Image="!="]/PrimaryExpression/PrimaryPrefix/Name/@Image, ".equals")]
@@ -39,13 +39,13 @@ EqualityExpression[@Image="!="][
 ]
 
 |
- 
+
 //UnaryExpressionNotPlusMinus[@Image="!"]/PrimaryExpression/PrimaryPrefix/Expression/ConditionalOrExpression[
  EqualityExpression[@Image="=="][PrimaryExpression/PrimaryPrefix/Literal/NullLiteral
   and PrimaryExpression/PrimaryPrefix/Name]
   and PrimaryExpression[
    PrimaryPrefix/Literal[@Image='""']
-   and PrimarySuffix[@Image="equals"] 
+   and PrimarySuffix[@Image="equals"]
    and PrimarySuffix/Arguments/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Name[@Image=../../../../../../../../EqualityExpression/PrimaryExpression/PrimaryPrefix/Name/@Image]
   or (
    PrimaryPrefix/Name[@Image = concat(../../../EqualityExpression[@Image="=="]/PrimaryExpression/PrimaryPrefix/Name/@Image, ".equals")]
@@ -61,13 +61,13 @@ EqualityExpression[@Image="!="][
  and PrimaryExpression/PrimaryPrefix/Expression/ConditionalOrExpression[
    EqualityExpression[@Image = "=="][
          PrimaryExpression/PrimaryPrefix/Literal/NullLiteral
-     and PrimaryExpression/PrimaryPrefix/Name 
+     and PrimaryExpression/PrimaryPrefix/Name
    ] and (PrimaryExpression[
      PrimaryPrefix/Literal[@Image='""']
      and PrimarySuffix[@Image = "equals"]
      and PrimarySuffix/Arguments/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Name[@Image = ../../../../../../../../EqualityExpression/PrimaryExpression/PrimaryPrefix/Name/@Image]
    ] or (
-       PrimaryExpression/PrimaryPrefix/Name[@Image = concat(../../../EqualityExpression/PrimaryExpression/PrimaryPrefix/Name/@Image, ".equals")] 
+       PrimaryExpression/PrimaryPrefix/Name[@Image = concat(../../../EqualityExpression/PrimaryExpression/PrimaryPrefix/Name/@Image, ".equals")]
        and PrimaryExpression/PrimarySuffix/Arguments/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal[@Image='""']
     )
    )
@@ -136,6 +136,60 @@ EqualityExpression[@Image="!="][
     and PrimaryExpression/PrimaryPrefix/Literal/NullLiteral
   ] and PrimaryExpression/PrimaryPrefix/Name[@Image = concat(../../../EqualityExpression["=="]/PrimaryExpression/PrimaryPrefix/Name/@Image, ".isEmpty")]
 ]
+]]>
+         </value>
+      </property>
+   </properties>
+</rule>
+
+<rule name="Prefer_CollectionUtils.isNotEmpty"
+      language="java"
+      message="Use CollectionUtils.isNotEmpty()"
+      class="net.sourceforge.pmd.lang.rule.XPathRule">
+   <description>
+	Use CollectionUtils.isNotEmpty()
+   </description>
+   <priority>5</priority>
+   <properties>
+      <property name="version" value="2.0"/>
+      <property name="xpath">
+         <value>
+<![CDATA[
+(//ConditionalAndExpression[
+  EqualityExpression[@Image="!="][
+    PrimaryExpression/PrimaryPrefix/Name[pmd-java:typeIs("java.util.Collection")]
+    and PrimaryExpression/PrimaryPrefix/Literal/NullLiteral
+  ] and (
+      UnaryExpressionNotPlusMinus[@Image="!"]/PrimaryExpression[
+        PrimaryPrefix/Name[@Image = concat(../../../../EqualityExpression/PrimaryExpression/PrimaryPrefix/Name/@Image, ".isEmpty")]
+        and PrimarySuffix/Arguments
+      ]
+    ) or (
+      EqualityExpression[@Image = "=="][
+        PrimaryExpression[
+          PrimaryPrefix/Name[@Image = concat(../../../../EqualityExpression[@Image="!="]/PrimaryExpression/PrimaryPrefix/Name/@Image, ".isEmpty")]
+          and PrimarySuffix/Arguments
+        ] and PrimaryExpression/PrimaryPrefix/Literal/BooleanLiteral[@True = false()]
+      ]
+    )
+]
+|
+//UnaryExpressionNotPlusMinus[@Image="!"]/PrimaryExpression/PrimaryPrefix/Expression/ConditionalOrExpression[
+  EqualityExpression[@Image="=="][
+    PrimaryExpression/PrimaryPrefix/Name[pmd-java:typeIs("java.util.Collection")]
+    and PrimaryExpression/PrimaryPrefix/Literal/NullLiteral
+  ] and PrimaryExpression/PrimaryPrefix/Name[@Image = concat(../../../EqualityExpression["=="]/PrimaryExpression/PrimaryPrefix/Name/@Image, ".isEmpty")]
+]
+|
+//EqualityExpression[@Image="=="][
+  PrimaryExpression/PrimaryPrefix/Literal/BooleanLiteral[@True = false()]
+  and PrimaryExpression/PrimaryPrefix/Expression/ConditionalOrExpression[
+    EqualityExpression[@Image="=="][
+      PrimaryExpression/PrimaryPrefix/Name[pmd-java:typeIs("java.util.Collection")]
+      and PrimaryExpression/PrimaryPrefix/Literal/NullLiteral
+    ] and PrimaryExpression/PrimaryPrefix/Name[@Image = concat(../../../EqualityExpression["=="]/PrimaryExpression/PrimaryPrefix/Name/@Image, ".isEmpty")]
+  ]
+])
 ]]>
          </value>
       </property>
