@@ -82,7 +82,7 @@ EqualityExpression[@Image="!="][
 
 <rule name="Prefer_StringUtils.isEmpty"
       language="java"
-      message="Use StringUtils.isEmpty"
+      message="Use StringUtils.isEmpty()"
       class="net.sourceforge.pmd.lang.rule.XPathRule">
    <description>
       Instead of checking against null and the empty string explicitly, use StringUtils.isEmpty
@@ -109,6 +109,32 @@ EqualityExpression[@Image="!="][
       ]
     )
   )
+]
+]]>
+         </value>
+      </property>
+   </properties>
+</rule>
+
+   <!-- CollectionUtils rules  -->
+<rule name="Prefer_CollectionUtils.isEmpty"
+      language="java"
+      message="Use org.apache.commons.collections.CollectionUtils.isEmpty()"
+      class="net.sourceforge.pmd.lang.rule.XPathRule">
+   <description>
+      Instead of checking against null and if the collection is empty explicitly, use CollectionUtils.isEmpty
+   </description>
+   <priority>5</priority>
+   <properties>
+      <property name="version" value="2.0"/>
+      <property name="xpath">
+         <value>
+<![CDATA[
+//ConditionalOrExpression[
+  EqualityExpression[@Image="=="][
+    PrimaryExpression/PrimaryPrefix/Name[pmd-java:typeIs("java.util.Collection")]
+    and PrimaryExpression/PrimaryPrefix/Literal/NullLiteral
+  ] and PrimaryExpression/PrimaryPrefix/Name[@Image = concat(../../../EqualityExpression["=="]/PrimaryExpression/PrimaryPrefix/Name/@Image, ".isEmpty")]
 ]
 ]]>
          </value>
