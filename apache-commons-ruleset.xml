@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ruleset xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+<ruleset xmlns="http://pmd.sourceforge.net/ruleset/2.0.0">
 
    <!-- StringUtils rules  -->
    <rule name="Prefer_StringUtils_isNotEmpty" language="java" message="Prefer StringUtils.isNotEmpty" class="net.sourceforge.pmd.lang.rule.XPathRule">
