@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset xmlns="http://pmd.sourceforge.net/ruleset/2.0.0">
+
+<rule name="Use_Collections.addAll"
+      language="java"
+      message="Use Collections.addAll"
+      class="net.sourceforge.pmd.lang.rule.XPathRule">
+   <description>
+      Collections.addAll(collection, array) has exactly the same
+      behavior as collection.addAll(Arrays.asList(array)), but
+      is more performant.
+   </description>
+   <priority>4</priority>
+   <properties>
+      <property name="version" value="2.0"/>
+      <property name="xpath">
+         <value>
+<![CDATA[
+//StatementExpression/PrimaryExpression[
+  PrimaryPrefix/Name[ends-with(@Image, ".addAll") and pmd-java:typeIs("java.util.Collection")]
+  and PrimarySuffix/Arguments/ArgumentList/Expression/PrimaryExpression[
+    PrimaryPrefix/Name[@Image = "Arrays.asList"]
+    and PrimarySuffix/Arguments/ArgumentList
+  ]
+]
+]]>
+         </value>
+      </property>
+   </properties>
+</rule>
+</ruleset>
