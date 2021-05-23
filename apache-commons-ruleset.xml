@@ -204,4 +204,48 @@ EqualityExpression[@Image="!="][
       </property>
    </properties>
 </rule>
+
+<!-- ArrayUtils rules -->
+<rule name="Prefer_ArrayUtils.isEmpty"
+      language="java"
+      message="Use org.apache.commons.lang3.ArrayUtils.isEmpty"
+      class="net.sourceforge.pmd.lang.rule.XPathRule">
+   <description>
+      Instead of explicitly checking against null and the length
+      of the array against 0, use ArrayUtils.isEmpty()
+   </description>
+   <priority>5</priority>
+   <properties>
+      <property name="version" value="2.0"/>
+      <property name="xpath">
+         <value>
+<![CDATA[
+//ConditionalOrExpression[
+  EqualityExpression[@Image = "=="][
+    PrimaryExpression/PrimaryPrefix/Literal/NullLiteral
+    and PrimaryExpression/PrimaryPrefix/Name[
+        (pmd-java:typeIsExactly("boolean[]")
+        or pmd-java:typeIsExactly("byte[]")
+        or pmd-java:typeIsExactly("char[]")
+        or pmd-java:typeIsExactly("double[]")
+        or pmd-java:typeIsExactly("float[]")
+        or pmd-java:typeIsExactly("int[]")
+        or pmd-java:typeIsExactly("java.lang.Object[]")
+        or pmd-java:typeIsExactly("long[]")
+        or pmd-java:typeIsExactly("short[]")
+        ) and ../../../following-sibling::EqualityExpression[@Image= "=="][
+          PrimaryExpression/PrimaryPrefix/Literal[@Image = "0"]
+          and PrimaryExpression/PrimaryPrefix/Name[
+            ends-with(@Image, ".length")
+            and substring-before(@Image, ".length") = ../../../preceding-sibling::EqualityExpression//Name/@Image
+          ]
+        ]
+    ]
+  ]
+]
+]]>
+         </value>
+      </property>
+   </properties>
+</rule>
 </ruleset>
