@@ -248,4 +248,53 @@ EqualityExpression[@Image="!="][
       </property>
    </properties>
 </rule>
+
+<rule name="Prefer_ArrayUtils.isNotEmpty"
+      language="java"
+      message="Use org.apache.commons.lang3.ArrayUtils.isNotEmpty"
+      class="net.sourceforge.pmd.lang.rule.XPathRule">
+   <description>
+Use ArrayUtils.isNotEmpty()
+   </description>
+   <priority>5</priority>
+   <properties>
+      <property name="version" value="2.0"/>
+      <property name="xpath">
+         <value>
+<![CDATA[
+(//ConditionalAndExpression[
+  EqualityExpression[@Image = "!="][
+    PrimaryExpression/PrimaryPrefix/Name[(
+      pmd-java:typeIsExactly("boolean[]")
+      or pmd-java:typeIsExactly("byte[]")
+      or pmd-java:typeIsExactly("char[]")
+      or pmd-java:typeIsExactly("double[]")
+      or pmd-java:typeIsExactly("float[]")
+      or pmd-java:typeIsExactly("int[]")
+      or pmd-java:typeIs("java.lang.Object[]")
+      or pmd-java:typeIsExactly("long[]")
+      or pmd-java:typeIsExactly("short[]")
+    ) and ../../../following-sibling::EqualityExpression[@Image = "!="][
+        PrimaryExpression/PrimaryPrefix/Literal[@Image = "0"]
+        and PrimaryExpression/PrimaryPrefix/Name[
+          ends-with(@Image, ".length")
+          and substring-before(@Image, ".length") = ../../../preceding-sibling::EqualityExpression//Name/@Image
+        ]
+      ]      
+    ]
+  ]
+]
+|
+//UnaryExpressionNotPlusMinus[@Image = "!" and PrimaryExpression/PrimaryPrefix/Name[@Image = "ArrayUtils.isEmpty"]]
+|
+//EqualityExpression[@Image = "=="][
+  PrimaryExpression/PrimaryPrefix/Literal/BooleanLiteral[@True = false()]
+  and PrimaryExpression/PrimaryPrefix/Name[@Image = "ArrayUtils.isEmpty"]
+]
+)
+]]>
+         </value>
+      </property>
+   </properties>
+</rule>
 </ruleset>
