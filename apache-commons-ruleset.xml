@@ -116,6 +116,117 @@ EqualityExpression[@Image="!="][
    </properties>
 </rule>
 
+<rule name="Prefer_StringUtils.isBlank"
+      language="java"
+      message="Use StringUtils.isBlank()"
+      class="net.sourceforge.pmd.lang.rule.XPathRule">
+   <description>
+      StringUtils.isBlank is more efficient than using trim() to check if an string is blank. This rule flags "".equals(string.trim()), .trim().equals(""), .trim().isEmpty(), .trim().length() <= 0 and .trim().length() == 0.
+   </description>
+   <priority>4</priority>
+   <properties>
+      <property name="version" value="2.0"/>
+      <property name="xpath">
+         <value>
+<![CDATA[
+(//Expression[PrimaryExpression[(
+  PrimaryPrefix[1]/Literal[@Image = '""']
+  and PrimarySuffix[1][@Image = "equals"]
+  and PrimarySuffix[2]/Arguments/ArgumentList/Expression/PrimaryExpression[
+    PrimaryPrefix[1]/Name[ends-with(@Image, ".trim")]
+    and PrimarySuffix[1]/Arguments
+  ]) or PrimaryPrefix[Name[ends-with(@Image, ".trim")] and following-sibling::PrimarySuffix[1]/Arguments] and (
+      PrimarySuffix[
+        @Image = "equals"
+        and following-sibling::PrimarySuffix/Arguments/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal[@Image = '""']
+      ]
+    ) or (
+      PrimarySuffix[
+        @Image = "isEmpty"
+        and following-sibling::PrimarySuffix/Arguments
+      ]
+    )
+  ] or RelationalExpression[@Image = "<="][
+    PrimaryExpression[1][
+      PrimaryPrefix[1]/Name[ends-with(@Image, ".trim")]
+      and PrimarySuffix[1]/Arguments
+      and PrimarySuffix[2][@Image = "length"]
+      and PrimarySuffix[3]/Arguments
+    ] and PrimaryExpression[2]/PrimaryPrefix/Literal[@Image = "0"]
+  ] or RelationalExpression[@Image = ">="][
+    PrimaryExpression[1]/PrimaryPrefix/Literal[@Image = "0"]
+    and PrimaryExpression[2][
+      PrimaryPrefix[1]/Name[ends-with(@Image, ".trim")]
+      and PrimarySuffix[1]/Arguments
+      and PrimarySuffix[2][@Image = "length"]
+      and PrimarySuffix[3]/Arguments
+    ]
+  ] or EqualityExpression[@Image = "=="][
+    PrimaryExpression/PrimaryPrefix/Literal[@Image = "0"]
+    and PrimaryExpression[
+      PrimaryPrefix/Name[ends-with(@Image, ".trim")]
+      and PrimarySuffix[1]/Arguments
+      and PrimarySuffix[2][@Image = "length"]
+      and PrimarySuffix[3]/Arguments
+    ]
+  ]
+]
+|
+//ConditionalOrExpression[
+  EqualityExpression[@Image = "=="][
+    PrimaryExpression/PrimaryPrefix/Name
+    and PrimaryExpression/PrimaryPrefix/Literal/NullLiteral
+  ] and (
+PrimaryExpression[(
+  PrimaryPrefix[1]/Literal[@Image = '""']
+  and PrimarySuffix[1][@Image = "equals"]
+  and PrimarySuffix[2]/Arguments/ArgumentList/Expression/PrimaryExpression[
+    PrimaryPrefix[1]/Name[ends-with(@Image, ".trim")]
+    and PrimarySuffix[1]/Arguments
+  ]) or PrimaryPrefix[Name[ends-with(@Image, ".trim")] and following-sibling::PrimarySuffix[1]/Arguments] and (
+      PrimarySuffix[
+        @Image = "equals"
+        and following-sibling::PrimarySuffix/Arguments/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal[@Image = '""']
+      ]
+    ) or (
+      PrimarySuffix[
+        @Image = "isEmpty"
+        and following-sibling::PrimarySuffix/Arguments
+      ]
+    )
+  ] or RelationalExpression[@Image = "<="][
+    PrimaryExpression[1][
+      PrimaryPrefix[1]/Name[ends-with(@Image, ".trim")]
+      and PrimarySuffix[1]/Arguments
+      and PrimarySuffix[2][@Image = "length"]
+      and PrimarySuffix[3]/Arguments
+    ] and PrimaryExpression[2]/PrimaryPrefix/Literal[@Image = "0"]
+  ] or RelationalExpression[@Image = ">="][
+    PrimaryExpression[1]/PrimaryPrefix/Literal[@Image = "0"]
+    and PrimaryExpression[2][
+      PrimaryPrefix[1]/Name[ends-with(@Image, ".trim")]
+      and PrimarySuffix[1]/Arguments
+      and PrimarySuffix[2][@Image = "length"]
+      and PrimarySuffix[3]/Arguments
+    ]
+  ] or EqualityExpression[@Image = "=="][
+    PrimaryExpression/PrimaryPrefix/Literal[@Image = "0"]
+    and PrimaryExpression[
+      PrimaryPrefix/Name[ends-with(@Image, ".trim")]
+      and PrimarySuffix[1]/Arguments
+      and PrimarySuffix[2][@Image = "length"]
+      and PrimarySuffix[3]/Arguments
+    ]
+  ]
+)
+]
+)
+]]>
+         </value>
+      </property>
+   </properties>
+</rule>
+
    <!-- CollectionUtils rules  -->
 <rule name="Prefer_CollectionUtils.isEmpty"
       language="java"
@@ -280,7 +391,7 @@ Use ArrayUtils.isNotEmpty()
           ends-with(@Image, ".length")
           and substring-before(@Image, ".length") = ../../../preceding-sibling::EqualityExpression//Name/@Image
         ]
-      ]      
+      ]
     ]
   ]
 ]
