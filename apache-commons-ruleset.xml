@@ -121,7 +121,7 @@ EqualityExpression[@Image="!="][
       message="Use StringUtils.isBlank()"
       class="net.sourceforge.pmd.lang.rule.XPathRule">
    <description>
-      StringUtils.isBlank is more efficient than using trim() to check if an string is blank. This rule flags "".equals(string.trim()), .trim().equals(""), .trim().isEmpty(), .trim().length() <= 0 and .trim().length() == 0.
+      StringUtils.isBlank is more efficient than using trim() to check if an string is blank.
    </description>
    <priority>4</priority>
    <properties>
@@ -403,6 +403,44 @@ Use ArrayUtils.isNotEmpty()
   and PrimaryExpression/PrimaryPrefix/Name[@Image = "ArrayUtils.isEmpty"]
 ]
 )
+]]>
+         </value>
+      </property>
+   </properties>
+</rule>
+
+<rule name="Use_StringUtils.replaceEach"
+      language="java"
+      message="Instead of calling replace multiple times, use StringUtils.replaceEach"
+      class="net.sourceforge.pmd.lang.rule.XPathRule">
+   <description>
+      Instead of calling replace multiple times, which needs to
+      iterate through the whole String each time, use StringUtils.replaceEach
+      which only needs to iterate it once.
+   </description>
+   <priority>3</priority>
+   <properties>
+      <property name="version" value="2.0"/>
+      <property name="xpath">
+         <value>
+<![CDATA[
+//PrimaryExpression[
+  PrimarySuffix[
+    @Image = "replace"
+    and following-sibling::PrimarySuffix[1][count(Arguments/ArgumentList/*) = 2]
+    and following-sibling::PrimarySuffix[2][
+      @Image = "replace"
+      and following-sibling::PrimarySuffix[1][count(Arguments/ArgumentList/*) = 2]
+    ]
+  ] or PrimaryPrefix[
+    Name[ends-with(@Image, ".replace")]
+    and following-sibling::PrimarySuffix[1][count(Arguments/ArgumentList/*) = 2]
+    and following-sibling::PrimarySuffix[2][
+      @Image = "replace"
+      and following-sibling::PrimarySuffix[1][count(Arguments/ArgumentList/*) = 2]
+    ]
+  ]
+]
 ]]>
          </value>
       </property>
