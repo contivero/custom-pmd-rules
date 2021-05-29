@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ruleset xmlns="http://pmd.sourceforge.net/ruleset/2.0.0">
+
 <rule name="RedundantAutowired"
       language="java"
-      message="@Autowired can be omitted for a Spring bean with a single constructor."
+      message="For a spring bean with a single constructor, @Autowired can be omitted."
       class="net.sourceforge.pmd.lang.rule.XPathRule">
    <description>
       Starting with Spring 4.3, if a class, which is configured
       as a Spring bean, has only one constructor, the @Autowired
       annotation can be omitted and Spring will use that constructor
-      and inject all necessary dependencies.
+      and inject all necessary dependencies. @Component marks a
+      class as a spring bean, and @Repository, @Service, @Controller
+      are all specializations of @Component. @RestController is
+      a convenience annotation that includes @Controller.
    </description>
    <priority>5</priority>
    <properties>
@@ -21,7 +25,7 @@
   and following-sibling::ConstructorDeclaration
   and ../count(following-sibling::ClassOrInterfaceBodyDeclaration/ConstructorDeclaration) = 0
   and ../count(preceding-sibling::ClassOrInterfaceBodyDeclaration/ConstructorDeclaration) = 0
-  and ancestor::TypeDeclaration/Annotation[@AnnotationName = "Component"] 
+  and ancestor::TypeDeclaration/Annotation[@AnnotationName = ("Component", "Repository", "Service", "Controller", "RestController")]
 ]
 ]]>
          </value>
