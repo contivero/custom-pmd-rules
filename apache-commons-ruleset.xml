@@ -446,4 +446,45 @@ Use ArrayUtils.isNotEmpty()
       </property>
    </properties>
 </rule>
+
+<rule name="Prefer_MapUtils.isEmpty"
+      language="java"
+      message="Use MapUtils.isEmpty"
+      class="net.sourceforge.pmd.lang.rule.XPathRule">
+   <description>
+Use MapUtils.isEmpty
+   </description>
+   <priority>3</priority>
+   <properties>
+      <property name="version" value="2.0"/>
+      <property name="xpath">
+         <value>
+<![CDATA[
+//ConditionalOrExpression[
+  EqualityExpression[@Image = "=="][
+    PrimaryExpression/PrimaryPrefix/Name
+    and PrimaryExpression/PrimaryPrefix/Literal/NullLiteral
+    and (following-sibling::EqualityExpression[@Image = "=="][
+      PrimaryExpression/PrimaryPrefix/Name[ends-with(@Image, ".size") and substring-before(@Image, ".size") = ../../../preceding-sibling::EqualityExpression/PrimaryExpression/PrimaryPrefix/Name/@Image]
+      or PrimaryExpression//Name[
+        ../following-sibling::PrimarySuffix[@Image = "size"]
+        and @Image = ../../../preceding-sibling::EqualityExpression//Name[../../..[@Image = "=="]]/@Image
+      ] and PrimaryExpression//Literal[@Image = "0"]
+    ]) or (following-sibling::RelationalExpression[@Image = "<="][
+      PrimaryExpression[1]/PrimaryPrefix/Name[
+        ends-with(@Image, ".size") and substring-before(@Image, ".size") = ../../../preceding-sibling::EqualityExpression/PrimaryExpression/PrimaryPrefix/Name/@Image
+        or ../following-sibling::PrimarySuffix[@Image = "size"] and @Image = ../../../preceding-sibling::EqualityExpression[@Image = "=="]/PrimaryExpression//Name/@Image
+      ]
+      and PrimaryExpression[2]/PrimaryPrefix/Literal[@Image = "0"]
+    ]) or (following-sibling::PrimaryExpression/PrimaryPrefix/Name[
+      ends-with(@Image, ".isEmpty") and substring-before(@Image, ".isEmpty") = ../../preceding-sibling::EqualityExpression[@Image = "=="]/PrimaryExpression//Name/@Image
+      or ../following-sibling::PrimarySuffix[@Image = "isEmpty"] and @Image = ../../preceding-sibling::EqualityExpression[@Image = "=="]/PrimaryExpression//Name/@Image
+    ])
+  ]
+]
+]]>
+         </value>
+      </property>
+   </properties>
+</rule>
 </ruleset>
