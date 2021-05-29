@@ -32,4 +32,29 @@
       </property>
    </properties>
 </rule>
+
+<rule name="AnnotationIncludedBy@RestController"
+      language="java"
+      message="@RestController includes @Controller and @ResponseBody"
+      class="net.sourceforge.pmd.lang.rule.XPathRule">
+   <description>
+      @RestController includes both @Controller and @ResponseBody,
+      so specifying either of them when @RestController is used
+      is redundant.
+   </description>
+   <priority>5</priority>
+   <properties>
+      <property name="version" value="2.0"/>
+      <property name="xpath">
+         <value>
+<![CDATA[
+//TypeDeclaration/Annotation[
+  @AnnotationName = ("Controller", "ResponseBody")
+  and ../Annotation[@AnnotationName = "RestController"]
+]
+]]>
+         </value>
+      </property>
+   </properties>
+</rule>
 </ruleset>
