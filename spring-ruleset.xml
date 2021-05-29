@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset xmlns="http://pmd.sourceforge.net/ruleset/2.0.0">
+<rule name="RedundantAutowired"
+      language="java"
+      message="@Autowired can be omitted for a Spring bean with a single constructor."
+      class="net.sourceforge.pmd.lang.rule.XPathRule">
+   <description>
+      Starting with Spring 4.3, if a class, which is configured
+      as a Spring bean, has only one constructor, the @Autowired
+      annotation can be omitted and Spring will use that constructor
+      and inject all necessary dependencies.
+   </description>
+   <priority>5</priority>
+   <properties>
+      <property name="version" value="2.0"/>
+      <property name="xpath">
+         <value>
+<![CDATA[
+//ClassOrInterfaceBodyDeclaration/Annotation[
+  @AnnotationName = "Autowired"
+  and following-sibling::ConstructorDeclaration
+  and ../count(following-sibling::ClassOrInterfaceBodyDeclaration/ConstructorDeclaration) = 0
+  and ../count(preceding-sibling::ClassOrInterfaceBodyDeclaration/ConstructorDeclaration) = 0
+  and ancestor::TypeDeclaration/Annotation[@AnnotationName = "Component"] 
+]
+]]>
+         </value>
+      </property>
+   </properties>
+</rule>
+</ruleset>
