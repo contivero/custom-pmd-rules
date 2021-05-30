@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset xmlns="http://pmd.sourceforge.net/ruleset/2.0.0">
+
+<rule name="Avoid_JPA_EagerFetching"
+      language="java"
+      message="Avoid using Eager fetching"
+      class="net.sourceforge.pmd.lang.rule.XPathRule">
+   <description>
+      Eager fetching is discouraged in the &quot;Java Persistence with
+      Hibernate&quot; book, as well as by Vlad Mihalcea, one of the
+      top Hibernate commiters as well as author of &quot;High-Performance
+      Java Persistence&quot;. See https://vladmihalcea.com/eager-fetching-is-a-code-smell/
+
+      @ManyToOne and @OneToOne are EAGER by default, so one should
+      explicitly use fetch = FetchType.LAZY with them.
+   </description>
+   <priority>3</priority>
+   <properties>
+      <property name="version" value="2.0"/>
+      <property name="xpath">
+         <value>
+<![CDATA[
+//Annotation[
+  MarkerAnnotation/Name[@Image = ("ManyToOne", "OneToOne")]
+  or NormalAnnotation/Name[@Image = ("ManyToOne", "OneToOne", "ManyToMany", "OneToMany", "ElementCollection")]
+  and .//MemberValuePair[
+    @Image = "fetch"
+    and MemberValue//Name[@Image = ("FetchType.EAGER", "EAGER")]
+  ]
+]
+]]>
+         </value>
+      </property>
+   </properties>
+</rule>
+</ruleset>
