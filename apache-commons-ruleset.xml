@@ -121,7 +121,8 @@ EqualityExpression[@Image="!="][
       message="Use StringUtils.isBlank()"
       class="net.sourceforge.pmd.lang.rule.XPathRule">
    <description>
-      StringUtils.isBlank is more efficient than using trim() to check if an string is blank.
+      StringUtils.isBlank is more efficient than using trim()
+      to check if an string is blank.
    </description>
    <priority>4</priority>
    <properties>
@@ -135,16 +136,16 @@ EqualityExpression[@Image="!="][
   and PrimarySuffix[2]/Arguments/ArgumentList/Expression/PrimaryExpression[
     PrimaryPrefix[1]/Name[ends-with(@Image, ".trim")]
     and PrimarySuffix[1]/Arguments
-  ]) or PrimaryPrefix[Name[ends-with(@Image, ".trim")] and following-sibling::PrimarySuffix[1]/Arguments] and (
-      PrimarySuffix[
+  ]) or PrimaryPrefix[
+      Name[ends-with(@Image, ".trim")]
+      and following-sibling::PrimarySuffix[1]/Arguments]
+      and (PrimarySuffix[(
         @Image = "equals"
         and following-sibling::PrimarySuffix/Arguments/ArgumentList/Expression/PrimaryExpression/PrimaryPrefix/Literal[@Image = '""']
-      ]
-    ) or (
-      PrimarySuffix[
+      ) or (
         @Image = "isEmpty"
         and following-sibling::PrimarySuffix/Arguments
-      ]
+      )]
     )
   ] or RelationalExpression[@Image = "<="][
     PrimaryExpression[1][
