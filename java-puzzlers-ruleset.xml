@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset xmlns="http://pmd.sourceforge.net/ruleset/2.0.0">
+
+<rule name="CompoundAssignmentOperatorsCanCauseSilentNarrowingCast"
+      language="java"
+      message="Compound assignment operator can cause a silent narrowing cast. Prefer explicit casting."
+      class="net.sourceforge.pmd.lang.rule.XPathRule">
+   <description>
+      Compound assignment operators can cause silent narrowing
+      casts. See puzzle 9 and 31 in Java Puzzlers (2.4 in the Catalog
+      of Pitfalls)
+   </description>
+   <priority>3</priority>
+   <properties>
+      <property name="version" value="2.0"/>
+      <property name="xpath">
+         <value>
+<![CDATA[
+//StatementExpression[
+  AssignmentOperator[@Image = ("+=", "-=", "*=", "/=", "%=", "&=", "|=", "^=", ">>=", ">>>=", "<<=")]
+  and 
+  (PrimaryExpression/PrimaryPrefix/Name[pmd-java:typeIs("int")]
+  and Expression/PrimaryExpression/PrimaryPrefix/Name[pmd-java:typeIs("long") or pmd-java:typeIs("float") or pmd-java:typeIs("double")]
+  ) or (PrimaryExpression/PrimaryPrefix/Name[pmd-java:typeIs("float")]
+  and Expression/PrimaryExpression/PrimaryPrefix/Name[pmd-java:typeIs("double")]
+  ) or (PrimaryExpression/PrimaryPrefix/Name[pmd-java:typeIs("byte")]
+  and Expression/PrimaryExpression/PrimaryPrefix/Name[not(pmd-java:typeIs("byte"))]
+  ) or (PrimaryExpression/PrimaryPrefix/Name[pmd-java:typeIs("char")]
+  and Expression/PrimaryExpression/PrimaryPrefix/Name[not(pmd-java:typeIs("char"))]
+  ) or (PrimaryExpression/PrimaryPrefix/Name[pmd-java:typeIs("short")]
+  and Expression/PrimaryExpression/PrimaryPrefix/Name[not(pmd-java:typeIs("short"))]
+  )
+]
+]]>
+         </value>
+      </property>
+   </properties>
+</rule>
+</ruleset>
+
