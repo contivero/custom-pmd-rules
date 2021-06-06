@@ -28,4 +28,30 @@
       </property>
    </properties>
 </rule>
+
+<rule name="StartThreadInsteadOfRunning"
+      language="java"
+      message="Call start() instead of run() on the thread"
+      class="net.sourceforge.pmd.lang.rule.XPathRule">
+   <description>
+      For the runnable in a thread to run in a different thread,
+      one has to call start(). If run() is called instead, this
+      runs in the same thread, so having created a Thread to not
+      run the runnable code in it usually doesn&apos; t make much sense.
+   </description>
+   <priority>3</priority>
+   <properties>
+      <property name="version" value="2.0"/>
+      <property name="xpath">
+         <value>
+<![CDATA[
+//StatementExpression/PrimaryExpression[
+  PrimaryPrefix/Name[ends-with(@Image, ".run") and pmd-java:typeIs("java.lang.Thread")]
+  and PrimarySuffix/Arguments
+]
+]]>
+         </value>
+      </property>
+   </properties>
+</rule>
 </ruleset>
