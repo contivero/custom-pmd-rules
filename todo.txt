@@ -1,0 +1,3 @@
+Convention: use plural noun for the name of methods returning a stream
+Convention: Use static imports for Collectors
+don't use collect(counting())
