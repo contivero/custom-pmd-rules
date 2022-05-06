@@ -491,4 +491,30 @@ Use MapUtils.isEmpty
       </property>
    </properties>
 </rule>
+
+<rule name="FastDateFormat"
+      language="java"
+      message="SimpleDateFormat is not thread-safe."
+      class="net.sourceforge.pmd.lang.rule.XPathRule">
+   <description>
+      SimpleDateFormat is not thread-safe. If formatting a Date
+      is needed, use instead FastDateFormat from apache commons-lang,
+      which is both faster and thread-safe.
+   </description>
+   <priority>1</priority>
+   <properties>
+      <property name="version" value="2.0"/>
+      <property name="xpath">
+         <value>
+<![CDATA[
+//ClassOrInterfaceBodyDeclaration[
+  FieldDeclaration[@Static = true()]//ClassOrInterfaceType[@Image = "SimpleDateFormat"]
+  and /CompilationUnit/ImportDeclaration/Name[@Image = "java.text.SimpleDateFormat"]
+]
+]]>
+         </value>
+      </property>
+   </properties>
+</rule>
+
 </ruleset>
