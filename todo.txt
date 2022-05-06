@@ -1,3 +1,5 @@
 Convention: use plural noun for the name of methods returning a stream
 Convention: Use static imports for Collectors
 don't use collect(counting())
+don't call alien methods inside a synchronized region (do not call a method that is designed to be overriden, or a function object).
+Use System.nanoTime() for measuring intervals instead of System.currentTimeMillis()

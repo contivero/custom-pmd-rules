@@ -36,5 +36,34 @@
       </property>
    </properties>
 </rule>
+<rule name="Stream_of"
+      language="java"
+      message="Use Stream.of instead of Arrays.asList(..).stream()"
+      class="net.sourceforge.pmd.lang.rule.XPathRule">
+   <description>
+      Using Stream.of(elems) instead of Arrays.asList(elems).stream()
+      is more concise.
+   </description>
+   <priority>5</priority>
+   <properties>
+      <property name="version" value="2.0"/>
+      <property name="xpath">
+         <value>
+<![CDATA[
+//PrimaryExpression[
+  PrimarySuffix[1]/Arguments
+  and PrimarySuffix[2][@Image="stream"]
+  and (PrimaryPrefix[1]/Name[@Image="Arrays.asList"] 
+    and /CompilationUnit/ImportDeclaration/Name[@Image="java.util.Arrays"]
+    or PrimaryPrefix[1]/Name[@Image="asList"] 
+    and /CompilationUnit/ImportDeclaration/Name[@Image="java.util.Arrays.asList"]
+  )
+]
+]]>
+         </value>
+      </property>
+   </properties>
+</rule>
+
 </ruleset>
 

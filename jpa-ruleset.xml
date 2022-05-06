@@ -33,4 +33,34 @@
       </property>
    </properties>
 </rule>
+
+<rule name="Do_not_declare_entities_final"
+      language="java"
+      message="Don't declare a JPA entity as final"
+      class="net.sourceforge.pmd.lang.rule.XPathRule">
+   <description>
+      Among the requirements defined in the JPA 2.1 specification
+      for an entity class, one of them is that the class not be
+      final. So from a portability point of view, it&apos;s not good.Additionally,
+      Hibernate in particular relies on subclassing to generate
+      proxies to be able to lazy-load the entity. Setting the entity
+      to final will prevent Hibernate from doing so.
+   </description>
+   <priority>3</priority>
+   <properties>
+      <property name="version" value="2.0"/>
+      <property name="xpath">
+         <value>
+<![CDATA[
+//ClassOrInterfaceDeclaration[
+  @Final = true() 
+  and preceding::ImportDeclaration/Name[@Image="javax.persistence.Entity"]
+  and preceding::Annotation/MarkerAnnotation/Name[@Image="Entity"]
+]
+]]>
+         </value>
+      </property>
+   </properties>
+</rule>
+
 </ruleset>

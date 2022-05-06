@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ruleset xmlns="http://pmd.sourceforge.net/ruleset/2.0.0">
+<ruleset xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+   name="Apache commons ruleset" 
+   xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
 
    <!-- StringUtils rules  -->
    <rule name="Prefer_StringUtils_isNotEmpty" language="java" message="Prefer StringUtils.isNotEmpty" class="net.sourceforge.pmd.lang.rule.XPathRule">
